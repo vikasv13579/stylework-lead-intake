@@ -5,7 +5,7 @@ WORKDIR /app
 # ---- Dependencies ----
 FROM base AS deps
 COPY package*.json ./
-RUN npm ci
+RUN npm install
 
 # ---- Build ----
 FROM deps AS builder

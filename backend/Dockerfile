@@ -6,7 +6,7 @@ RUN apk add --no-cache openssl
 # ---- Dependencies ----
 FROM base AS deps
 COPY package*.json ./
-RUN npm ci --only=production
+RUN npm install --omit=dev --ignore-scripts
 COPY prisma ./prisma/
 RUN npx prisma generate
 
@@ -14,7 +14,7 @@ RUN npx prisma generate
 FROM base AS builder
 COPY package*.json ./
 COPY tsconfig*.json ./
-RUN npm ci
+RUN npm install --ignore-scripts
 COPY prisma ./prisma/
 RUN npx prisma generate
 COPY src ./src/
