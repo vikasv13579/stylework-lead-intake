@@ -5,6 +5,7 @@ import morgan from 'morgan';
 import { config } from './config/env';
 import { errorHandler, notFoundHandler } from './middleware/errorHandler';
 import healthRouter from './routes/health';
+import webhookRouter from './routes/webhook';
 import logger from './config/logger';
 
 export function createApp(): Application {
@@ -38,6 +39,7 @@ export function createApp(): Application {
 
   // Routes
   app.use('/health', healthRouter);
+  app.use('/webhook', webhookRouter);
 
   // 404 handler (must be after all routes)
   app.use(notFoundHandler);
