@@ -1,6 +1,7 @@
 import { createApp } from './app';
 import { config } from './config/env';
 import logger from './config/logger';
+import { disconnectPrisma } from './lib/prisma';
 
 const app = createApp();
 
@@ -17,7 +18,7 @@ const shutdown = (signal: string): void => {
   logger.info(`${signal} received — shutting down gracefully`);
   server.close(() => {
     logger.info('HTTP server closed');
-    process.exit(0);
+    void disconnectPrisma().then(() => process.exit(0));
   });
 };
 

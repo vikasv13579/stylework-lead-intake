@@ -56,8 +56,9 @@ Thumbs.db
 *.swo
 *~
 
-# Prisma
-backend/prisma/migrations/*/migration.sql
+# Prisma — track migrations but not migration.lock
+!backend/prisma/migrations/
+backend/prisma/migrations/**/*.lock
 
 # TypeScript
 *.tsbuildinfo
