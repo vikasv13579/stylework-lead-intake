@@ -84,19 +84,19 @@ export function LeadDrawer({ lead, onClose }: LeadDrawerProps) {
                       <p className="text-sm font-semibold text-slate-200">{a.action}</p>
                       <time className="text-[11px] text-slate-600 shrink-0">{timeAgo(a.createdAt)}</time>
                     </div>
-                    {a.metadata && (
+                    {a.metadata != null && (
                       <pre className="mt-1.5 text-xs text-slate-500 whitespace-pre-wrap break-all">
-                        {JSON.stringify(a.metadata, null, 2)}
+                        {String(JSON.stringify(a.metadata, null, 2))}
                       </pre>
                     )}
-                    {a.previousValue && a.newValue && (
+                    {a.previousValue != null && a.newValue != null && (
                       <div className="mt-1.5 flex items-center gap-2 text-xs text-slate-500">
                         <span className="rounded bg-rose-500/10 px-1.5 py-0.5 text-rose-400">
-                          {JSON.stringify(a.previousValue)}
+                          {String(JSON.stringify(a.previousValue))}
                         </span>
                         <span>→</span>
                         <span className="rounded bg-emerald-500/10 px-1.5 py-0.5 text-emerald-400">
-                          {JSON.stringify(a.newValue)}
+                          {String(JSON.stringify(a.newValue))}
                         </span>
                       </div>
                     )}
