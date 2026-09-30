@@ -9,6 +9,11 @@ module.exports = {
       tsconfig: './tsconfig.test.json',
     },
   },
+  moduleNameMapper: {
+    '^../src/lib/prisma$': '<rootDir>/tests/__mocks__/prisma.ts',
+    '^../../src/lib/prisma$': '<rootDir>/tests/__mocks__/prisma.ts',
+    '^../lib/prisma$': '<rootDir>/tests/__mocks__/prisma.ts',
+  },
   collectCoverageFrom: [
     'src/**/*.ts',
     '!src/server.ts',
@@ -18,3 +23,4 @@ module.exports = {
   clearMocks: true,
   restoreMocks: true,
 };
+
