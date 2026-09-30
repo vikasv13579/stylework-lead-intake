@@ -6,6 +6,7 @@ import { config } from './config/env';
 import { errorHandler, notFoundHandler } from './middleware/errorHandler';
 import healthRouter from './routes/health';
 import webhookRouter from './routes/webhook';
+import leadRouter from './routes/lead';
 import logger from './config/logger';
 
 export function createApp(): Application {
@@ -40,6 +41,7 @@ export function createApp(): Application {
   // Routes
   app.use('/health', healthRouter);
   app.use('/webhook', webhookRouter);
+  app.use('/api/leads', leadRouter);
 
   // 404 handler (must be after all routes)
   app.use(notFoundHandler);
