@@ -13,6 +13,7 @@ import {
   ListLeadsQuery,
   AddActivityInput,
 } from '../validators/lead.validator';
+import { validateStatusTransition } from './workflow.service';
 import { Errors } from '../types/errors';
 import logger from '../config/logger';
 
@@ -111,7 +112,7 @@ export async function createLeadService(
 }
 
 /**
- * Updates an existing lead. Logs status changes automatically.
+ * Updates an existing lead. Enforces state-machine rules when status changes.
  */
 export async function updateLeadService(
   id: string,
@@ -122,8 +123,43 @@ export async function updateLeadService(
     throw Errors.LeadNotFound(id);
   }
 
+  // Enforce workflow state machine if status is being changed
+  if (input.status && input.status !== existing.status) {
+    validateStatusTransition(existing.status, input.status);
+  }
+
   const updated = await updateLeadInRepo(id, input, existing.status);
   logger.info('Lead updated', { leadId: id, updatedFields: Object.keys(input) });
+  return updated;
+}
+
+/**
+ * Transitions a lead's status through the allowed state machine.
+ * Dedicated endpoint ensures status changes are always validated.
+ */
+export async function transitionLeadStatusService(
+  id: string,
+  nextStatus: import('@prisma/client').LeadStatus
+): Promise<LeadWithActivities> {
+  const existing = await findLeadById(id);
+  if (!existing) {
+    throw Errors.LeadNotFound(id);
+  }
+
+  validateStatusTransition(existing.status, nextStatus);
+
+  const updated = await updateLeadInRepo(
+    id,
+    { status: nextStatus },
+    existing.status
+  );
+
+  logger.info('Lead status transitioned', {
+    leadId: id,
+    from: existing.status,
+    to: nextStatus,
+  });
+
   return updated;
 }
 

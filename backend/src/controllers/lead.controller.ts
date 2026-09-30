@@ -4,6 +4,7 @@ import {
   CreateLeadSchema,
   UpdateLeadSchema,
   AddActivitySchema,
+  TransitionStatusSchema,
 } from '../validators/lead.validator';
 import {
   getLeadsService,
@@ -12,6 +13,7 @@ import {
   updateLeadService,
   deleteLeadService,
   addLeadActivityService,
+  transitionLeadStatusService,
 } from '../services/lead.service';
 
 /**
@@ -119,6 +121,29 @@ export async function addActivity(
     const input = AddActivitySchema.parse(req.body);
     const lead = await addLeadActivityService(id, input);
     res.status(201).json({ message: 'Activity logged successfully', data: lead });
+  } catch (error) {
+    next(error);
+  }
+}
+
+/**
+ * PATCH /api/leads/:id/status
+ * Transitions a lead to a new status via the state machine.
+ * Returns 422 if the transition is not permitted.
+ */
+export async function transitionStatus(
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> {
+  try {
+    const id = req.params.id as string;
+    const { status } = TransitionStatusSchema.parse(req.body);
+    const lead = await transitionLeadStatusService(id, status);
+    res.status(200).json({
+      message: `Lead status transitioned to '${status}'`,
+      data: lead,
+    });
   } catch (error) {
     next(error);
   }

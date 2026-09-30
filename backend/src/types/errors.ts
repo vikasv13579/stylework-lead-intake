@@ -31,6 +31,13 @@ export const Errors = {
   InvalidStatus: (status: string) =>
     new AppError(`Invalid status value: '${status}'`, 422, 'INVALID_STATUS'),
 
+  InvalidStatusTransition: (from: string, to: string) =>
+    new AppError(
+      `Cannot transition lead status from '${from}' to '${to}'`,
+      422,
+      'INVALID_STATUS_TRANSITION'
+    ),
+
   ValidationError: (message: string) =>
     new AppError(message, 400, 'VALIDATION_ERROR'),
 

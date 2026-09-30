@@ -44,7 +44,12 @@ export const AddActivitySchema = z.object({
   metadata: z.record(z.string(), z.unknown()).optional(),
 });
 
+export const TransitionStatusSchema = z.object({
+  status: LeadStatusEnum,
+});
+
 export type CreateLeadInput = z.infer<typeof CreateLeadSchema>;
 export type UpdateLeadInput = z.infer<typeof UpdateLeadSchema>;
 export type ListLeadsQuery = z.infer<typeof ListLeadsQuerySchema>;
 export type AddActivityInput = z.infer<typeof AddActivitySchema>;
+export type TransitionStatusInput = z.infer<typeof TransitionStatusSchema>;

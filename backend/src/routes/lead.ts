@@ -6,6 +6,7 @@ import {
   updateLead,
   deleteLead,
   addActivity,
+  transitionStatus,
 } from '../controllers/lead.controller';
 
 const router = Router();
@@ -18,10 +19,15 @@ router.route('/').get(getLeads).post(createLead);
 
 /**
  * GET /api/leads/:id - Get lead by ID
- * PATCH /api/leads/:id - Update lead details / status
+ * PATCH /api/leads/:id - Update lead details (fields only, not status)
  * DELETE /api/leads/:id - Delete lead
  */
 router.route('/:id').get(getLeadById).patch(updateLead).delete(deleteLead);
+
+/**
+ * PATCH /api/leads/:id/status - Transition lead status via state machine
+ */
+router.patch('/:id/status', transitionStatus);
 
 /**
  * POST /api/leads/:id/activities - Log custom activity for a lead
